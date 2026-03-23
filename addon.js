@@ -81,10 +81,10 @@ const builder = new addonBuilder({
             type: "select",
             title: "Spoiler Level",
             options: [
-                { value: "minimal", label: "Minimal (hide descriptions)" },
-                { value: "standard", label: "Standard (hide titles + descriptions)" },
-                { value: "aggressive", label: "Aggressive (hide everything)" }
-            ],
+        	"minimal (hide descriptions)",
+        	"standard (hide titles + descriptions)",
+        	"aggressive (hide everything)"
+    	    ],
             default: "standard"
         }
     ]
@@ -106,18 +106,18 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
             let newEp = { ...ep };
 
             // MINIMAL
-            if (config.mode === "minimal") {
+            if (config.mode.startsWith("minimal")) {
                 newEp.overview = "";
             }
 
             // STANDARD
-            if (config.mode === "standard") {
+            if (config.mode.startsWith("standard")) {
                 newEp.title = formatEpisode(ep.season, ep.episode);
                 newEp.overview = "";
             }
 
             // AGGRESSIVE
-            if (config.mode === "aggressive") {
+            if (config.mode.startsWith("aggressive")) {
                 newEp.title = formatEpisode(ep.season, ep.episode);
                 newEp.overview = "";
                 newEp.thumbnail = "";
