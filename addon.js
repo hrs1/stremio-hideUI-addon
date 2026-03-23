@@ -3,7 +3,7 @@ const { addonBuilder } = require("stremio-addon-sdk");
 console.log("🔥 addon.js loaded");
 
 const builder = new addonBuilder({
-    id: "org.example.spoilerfree.test",
+    id: "org.spoilerfree.unique." + Date.now(),
     version: "1.0.0",
     name: "Spoiler Test",
     description: "Debug addon",
