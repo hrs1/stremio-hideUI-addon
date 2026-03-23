@@ -1,46 +1,6 @@
 const { addonBuilder } = require("stremio-addon-sdk");
 const fetch = require("node-fetch");
 
-// Optional Redis support
-let redisClient = null;
-if (process.env.REDIS_URL) {
-    const Redis = require("ioredis");
-    redisClient = new Redis(process.env.REDIS_URL);
-}
-
-// Fallback memory cache
-const memoryCache = new Map();
-const CACHE_TTL = 60 * 60; // seconds
-
-async function getCache(key) {
-    if (redisClient) {
-        const data = await redisClient.get(key);
-        return data ? JSON.parse(data) : null;
-    }
-
-    const entry = memoryCache.get(key);
-    if (!entry) return null;
-
-    if (Date.now() > entry.expiry) {
-        memoryCache.delete(key);
-        return null;
-    }
-
-    return entry.data;
-}
-
-async function setCache(key, data) {
-    if (redisClient) {
-        await redisClient.setex(key, CACHE_TTL, JSON.stringify(data));
-        return;
-    }
-
-    memoryCache.set(key, {
-        data,
-        expiry: Date.now() + CACHE_TTL * 1000
-    });
-}
-
 // Fetch metadata
 async function getMeta(id) {
     const cached = await getCache(id);
