@@ -10,7 +10,13 @@ const builder = new addonBuilder({
     resources: ["meta"],
     types: ["series"],
     idPrefixes: ["tt"],
-    catalogs: [],
+    catalogs: [
+    {
+        type: "series",
+        id: "spoiler-test",
+        name: "Spoiler Test"
+    }
+],
     behaviorHints: {
         configurable: true
     },
@@ -29,6 +35,12 @@ builder.defineMetaHandler((args) => {
     console.log("🚀 META HIT:", args);
 
     return Promise.resolve({ meta: null });
+});
+
+builder.defineCatalogHandler(() => {
+    return Promise.resolve({
+        metas: []
+    });
 });
 
 module.exports = builder.getInterface();
