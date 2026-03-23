@@ -1,12 +1,35 @@
-const addonInterface = require("./addon");
-const { serveHTTP } = require("stremio-addon-sdk");
+const { addonBuilder, serveHTTP } = require("stremio-addon-sdk");
+
+// 🔥 Minimal test addon (no external fetch, no errors possible)
+const builder = new addonBuilder({
+    id: "org.test.spoilerfree",
+    version: "1.0.0",
+    name: "Test Addon",
+    resources: ["meta"],
+    types: ["series"],
+    idPrefixes: ["tt"],
+    catalogs: [],
+    behaviorHints: { configurable: true },
+    config: [
+        {
+            key: "mode",
+            type: "select",
+            title: "Mode",
+            options: ["minimal", "standard", "aggressive"],
+            default: "standard"
+        }
+    ]
+});
+
+builder.defineMetaHandler(() => {
+    return { meta: null };
+});
 
 const PORT = process.env.PORT || 10000;
 
-// ✅ IMPORTANT: enable config UI
-serveHTTP(addonInterface, {
+serveHTTP(builder.getInterface(), {
     port: PORT,
-    // this enables /configure endpoint
-    host: "0.0.0.0",
-    allowOrigin: "*"
+    host: "0.0.0.0"
 });
+
+console.log("✅ Server started on port:", PORT);
