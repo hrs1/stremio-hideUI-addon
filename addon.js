@@ -68,6 +68,7 @@ const builder = new addonBuilder({
     resources: ["meta"],
     types: ["series"],
     idPrefixes: ["tt"],
+    catalogs: [],
     config: [
         {
             key: "enabled",
