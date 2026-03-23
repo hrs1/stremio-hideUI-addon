@@ -1,0 +1,1 @@
+"# stremio-hideUI-addon" 
