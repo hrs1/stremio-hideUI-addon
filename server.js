@@ -1,13 +1,14 @@
-const { serveHTTP } = require("stremio-addon-sdk");
-const addonInterface = require("./addon");
-
-console.log("🔥 server.js starting...");
+const http = require("http");
 
 const PORT = process.env.PORT || 10000;
 
-serveHTTP(addonInterface, {
-    port: PORT,
-    host: "0.0.0.0"
+const server = http.createServer((req, res) => {
+    console.log("🔥 REQUEST RECEIVED:", req.method, req.url);
+
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("OK");
 });
 
-console.log("✅ Listening on port:", PORT);
+server.listen(PORT, "0.0.0.0", () => {
+    console.log("🚀 Test server running on port", PORT);
+});
