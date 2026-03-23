@@ -15,14 +15,13 @@ function formatEpisode(season, episode) {
 
 const builder = new addonBuilder({
     id: "org.example.spoilerfree",
-    version: "1.0.2",
+    version: "1.0.3",
     name: "Spoiler-Free Mode",
     description: "Hides episode titles and descriptions",
-    resources: ["meta"],
+    resources: ["catalog", "meta"],   // IMPORTANT: include catalog
     types: ["series"],
     idPrefixes: ["tt"],
 
-    // ✅ REQUIRED: must NOT be empty
     catalogs: [
         {
             type: "series",
@@ -32,6 +31,16 @@ const builder = new addonBuilder({
     ]
 });
 
+// REQUIRED catalog handler
+builder.defineCatalogHandler(() => {
+    console.log("📦 CATALOG REQUEST");
+
+    return Promise.resolve({
+        metas: []
+    });
+});
+
+// META handler
 builder.defineMetaHandler(async ({ id, type }) => {
     console.log("🚀 META REQUEST:", id);
 
