@@ -91,6 +91,7 @@ const builder = new addonBuilder({
 });
 
 builder.defineMetaHandler(async ({ id, type, config }) => {
+    console.log("META REQUEST:", id, config);
     if (type !== "series") return { meta: null };
 
     try {
