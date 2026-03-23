@@ -1,6 +1,17 @@
 const { addonBuilder } = require("stremio-addon-sdk");
 const fetch = require("node-fetch");
 
+// Simple in-memory cache (FIXED)
+const cache = new Map();
+
+async function getCache(id) {
+    return cache.get(id);
+}
+
+async function setCache(id, value) {
+    cache.set(id, value);
+}
+
 // Fetch metadata
 async function getMeta(id) {
     const cached = await getCache(id);
@@ -15,23 +26,25 @@ async function getMeta(id) {
 
 // Format S01E01
 function formatEpisode(season, episode) {
-    const s = String(season).padStart(2, "0");
-    const e = String(episode).padStart(2, "0");
+    const s = String(season || 0).padStart(2, "0");
+    const e = String(episode || 0).padStart(2, "0");
     return `S${s}E${e}`;
 }
 
 const builder = new addonBuilder({
-    id: "org.example.spoilerfree",
-    version: "3.0.0",
+    id: "org.example.spoilerfree.v5",
+    version: "3.0.1",
     name: "Spoiler-Free Mode",
     description: "Hide episode spoilers with configurable levels",
     resources: ["meta"],
     types: ["series"],
     idPrefixes: ["tt"],
     catalogs: [],
+
     behaviorHints: {
         configurable: true
     },
+
     config: [
         {
             key: "enabled",
@@ -43,11 +56,7 @@ const builder = new addonBuilder({
             key: "mode",
             type: "select",
             title: "Spoiler Level",
-            options: [
-        	"minimal (hide descriptions)",
-        	"standard (hide titles + descriptions)",
-        	"aggressive (hide everything)"
-    	    ],
+            options: ["minimal", "standard", "aggressive"],
             default: "standard"
         }
     ]
@@ -55,32 +64,30 @@ const builder = new addonBuilder({
 
 builder.defineMetaHandler(async ({ id, type, config }) => {
     console.log("META REQUEST:", id, config);
+
     if (type !== "series") return { meta: null };
 
     try {
         const meta = await getMeta(id);
         if (!meta || !meta.videos) return { meta };
 
-        if (!config || config.enabled === false) {
-            return { meta };
-        }
+        if (!config?.enabled) return { meta };
 
         meta.videos = meta.videos.map(ep => {
             let newEp = { ...ep };
 
-            // MINIMAL
-            if (config.mode.startsWith("minimal")) {
+            const mode = config.mode || "standard";
+
+            if (mode === "minimal") {
                 newEp.overview = "";
             }
 
-            // STANDARD
-            if (config.mode.startsWith("standard")) {
+            if (mode === "standard") {
                 newEp.title = formatEpisode(ep.season, ep.episode);
                 newEp.overview = "";
             }
 
-            // AGGRESSIVE
-            if (config.mode.startsWith("aggressive")) {
+            if (mode === "aggressive") {
                 newEp.title = formatEpisode(ep.season, ep.episode);
                 newEp.overview = "";
                 newEp.thumbnail = "";
@@ -93,7 +100,7 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
         return { meta };
 
     } catch (err) {
-        console.error(err);
+        console.error("ERROR:", err);
         return { meta: null };
     }
 });
