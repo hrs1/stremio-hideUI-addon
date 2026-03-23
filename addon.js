@@ -69,6 +69,9 @@ const builder = new addonBuilder({
     types: ["series"],
     idPrefixes: ["tt"],
     catalogs: [],
+    behaviorHints: {
+        configurable: true
+    },
     config: [
         {
             key: "enabled",
