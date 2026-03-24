@@ -57,7 +57,7 @@ const builder = new addonBuilder({
             default: "standard"
         },
         {
-            key: "mode",
+            key: "check",
             type: "textarea",
             default: "Just checking here"
         }
