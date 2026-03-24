@@ -55,6 +55,11 @@ const builder = new addonBuilder({
                  "Paranoid: maximum protection, removes almost all episode info.",
             options: ["minimal", "standard", "aggressive", "paranoid"],
             default: "standard"
+        },
+        {
+            key: "mode",
+            type: "textarea",
+            default: "Just checking here"
         }
     ]
 });
