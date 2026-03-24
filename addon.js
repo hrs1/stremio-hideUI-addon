@@ -17,9 +17,9 @@ function formatEpisode(season, episode) {
 
 const builder = new addonBuilder({
     id: "org.spoilerfirewall.global" + Date.now(),
-    version: "4.0.0",
+    version: "01.00",
     name: "Spoiler Firewall",
-    description: "Global anti-spoiler layer for Stremio\n\n" + 
+    description: "Gl0obal anti-spoiler layer for Stremio\n\n" + 
         "Note: Requires to move the add-on to top of the list (highest priority) in your account!.\n" + 
         "You can use something like a Stremio Add-on Manager (https://stremio-addon-manager.vercel.app/)",
     resources: ["meta", "catalog"],
