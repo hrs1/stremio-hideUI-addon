@@ -74,7 +74,7 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
         const meta = await getMeta(id);
         if (!meta) return { meta: null };
 
-        if (!config || config.enabled === false) {
+        if (!config || config.enabled !== "on") {
             return { meta };
         }
 
