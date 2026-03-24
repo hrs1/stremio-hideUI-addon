@@ -42,7 +42,7 @@ const builder = new addonBuilder({
             key: "enabled",
             type: "checkbox",
             title: "Enable Spoiler Free Mode",
-            default: false
+            default: true
         },
         {
             key: "mode",
