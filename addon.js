@@ -16,7 +16,7 @@ function formatEpisode(season, episode) {
 }
 
 const builder = new addonBuilder({
-    id: "org.spoilerfirewall.global",
+    id: "org.spoilerfirewall.global" + Date.now(),
     version: "4.0.0",
     name: "Spoiler Firewall",
     description: "Global anti-spoiler layer for Stremio",
@@ -47,6 +47,11 @@ const builder = new addonBuilder({
             key: "mode",
             type: "select",
             title: "Protection Level",
+            description:
+                 "Minimal: hides episode descriptions only.\n" +
+                 "Standard: hides titles and descriptions.\n" +
+                 "Aggressive: also hides thumbnails and air dates.\n" +
+                 "Paranoid: maximum protection, removes almost all episode info.",
             options: ["minimal", "standard", "aggressive", "paranoid"],
             default: "standard"
         }
