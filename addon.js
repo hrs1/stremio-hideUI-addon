@@ -47,7 +47,7 @@ const builder = new addonBuilder({
         {
             key: "mode",
             type: "select",
-            title: "Protection Level:\nminimal = hide descriptions\nstandard = hide titles + descriptions\naggressive = hide thumbnails + dates\nparanoid              = maximum protection",
+            title: "Spoiler Level (minimal: desc only, standard: titles+desc, aggressive: +images, paranoid: max)",
             description:
                  "Minimal: hides episode descriptions only.\n" +
                  "Standard: hides titles and descriptions.\n" +
