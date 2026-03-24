@@ -34,6 +34,7 @@ const builder = new addonBuilder({
 
     behaviorHints: {
         configurable: true
+        configurationRequired: true
     },
 
     config: [
