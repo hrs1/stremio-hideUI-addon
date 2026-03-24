@@ -16,10 +16,10 @@ function formatEpisode(season, episode) {
 }
 
 const builder = new addonBuilder({
-    id: "org.example.spoilerfree.configurable",
-    version: "3.0.0",
-    name: "Spoiler-Free Mode",
-    description: "Configurable anti-spoiler system",
+    id: "org.spoilerfirewall.global",
+    version: "4.0.0",
+    name: "Spoiler Firewall",
+    description: "Global anti-spoiler layer for Stremio",
     resources: ["meta", "catalog"],
     types: ["series"],
     idPrefixes: ["tt"],
@@ -27,8 +27,8 @@ const builder = new addonBuilder({
     catalogs: [
         {
             type: "series",
-            id: "spoiler-free",
-            name: "Spoiler Free"
+            id: "firewall",
+            name: "Spoiler Firewall"
         }
     ],
 
@@ -40,27 +40,27 @@ const builder = new addonBuilder({
         {
             key: "enabled",
             type: "checkbox",
-            title: "Enable Spoiler-Free Mode",
+            title: "Enable Firewall",
             default: true
         },
         {
             key: "mode",
             type: "select",
-            title: "Spoiler Level",
-            options: ["minimal", "standard", "aggressive"],
+            title: "Protection Level",
+            options: ["minimal", "standard", "aggressive", "paranoid"],
             default: "standard"
         }
     ]
 });
 
-// REQUIRED catalog handler
+// Required catalog handler
 builder.defineCatalogHandler(() => {
     return Promise.resolve({ metas: [] });
 });
 
-// META HANDLER
+// GLOBAL META FIREWALL
 builder.defineMetaHandler(async ({ id, type, config }) => {
-    console.log("🚀 META REQUEST:", id, config);
+    console.log("🛡️ FIREWALL HIT:", id, config);
 
     if (type !== "series") return { meta: null };
 
@@ -68,7 +68,6 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
         const meta = await getMeta(id);
         if (!meta) return { meta: null };
 
-        // if disabled → return original
         if (!config || config.enabled === false) {
             return { meta };
         }
@@ -79,11 +78,10 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
             const base = {
                 id: ep.id,
                 season: ep.season,
-                episode: ep.episode,
-                released: ep.released || null
+                episode: ep.episode
             };
 
-            // MINIMAL → only hide descriptions
+            // MINIMAL → hide descriptions only
             if (mode === "minimal") {
                 return {
                     ...base,
@@ -94,7 +92,7 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
                 };
             }
 
-            // STANDARD → hide title + description
+            // STANDARD → hide titles + descriptions
             if (mode === "standard") {
                 return {
                     ...base,
@@ -105,7 +103,7 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
                 };
             }
 
-            // AGGRESSIVE → full strip
+            // AGGRESSIVE → remove visuals + metadata
             if (mode === "aggressive") {
                 return {
                     ...base,
@@ -114,6 +112,23 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
                     description: "",
                     plot: "",
                     synopsis: "",
+                    released: null,
+                    thumbnail: undefined
+                };
+            }
+
+            // PARANOID → absolute spoiler lockdown
+            if (mode === "paranoid") {
+                return {
+                    id: ep.id,
+                    season: ep.season,
+                    episode: ep.episode,
+                    title: `Episode ${ep.episode}`,
+                    overview: "",
+                    description: "",
+                    plot: "",
+                    synopsis: "",
+                    released: null,
                     thumbnail: undefined
                 };
             }
@@ -123,18 +138,26 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
 
         return {
             meta: {
-                ...meta,
-                videos: cleanVideos,
+                id: meta.id,
+                type: meta.type,
+                name: meta.name,
 
-                // also clean series-level text
-                description: mode === "minimal" ? meta.description : "",
+                // strip series-level spoilers
+                description: "",
                 overview: "",
-                plot: ""
+                plot: "",
+                tagline: "",
+
+                // keep safe UI fields
+                poster: meta.poster,
+                background: mode === "paranoid" ? undefined : meta.background,
+
+                videos: cleanVideos
             }
         };
 
     } catch (err) {
-        console.error("ERROR:", err);
+        console.error("FIREWALL ERROR:", err);
         return { meta: null };
     }
 });
