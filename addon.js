@@ -40,13 +40,13 @@ const builder = new addonBuilder({
         {
             key: "enabled",
             type: "checkbox",
-            title: "Enable Firewall",
-            default: true
+            title: "Enable Spoiler Free Mode",
+            default: false
         },
         {
             key: "mode",
             type: "select",
-            title: "Protection Level",
+            title: "Protection Level:\nminimal = hide descriptions\nstandard = hide titles + descriptions\naggressive = hide thumbnails + dates\nparanoid              = maximum protection",
             description:
                  "Minimal: hides episode descriptions only.\n" +
                  "Standard: hides titles and descriptions.\n" +
@@ -86,7 +86,7 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
                 episode: ep.episode
             };
 
-            // MINIMAL → hide descriptions only
+            // MINIMAL → hide episode description only
             if (mode === "minimal") {
                 return {
                     ...base,
@@ -147,11 +147,11 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
                 type: meta.type,
                 name: meta.name,
 
-                // strip series-level spoilers
-                description: "",
-                overview: "",
-                plot: "",
-                tagline: "",
+                // strip series-level spoilers for paranoid level only
+                description:  mode === "paranoid" ? "" : meta.description,
+                overview: mode === "paranoid" ? "" : meta.overview,
+                plot: mode === "paranoid" ? "" : meta.plot,
+                tagline: mode === "paranoid" ? "" : meta.mode,
 
                 // keep safe UI fields
                 poster: meta.poster,
