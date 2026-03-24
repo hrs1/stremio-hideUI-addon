@@ -33,7 +33,7 @@ const builder = new addonBuilder({
     ],
 
     behaviorHints: {
-        configurable: true
+        configurable: true,
         configurationRequired: true
     },
 
