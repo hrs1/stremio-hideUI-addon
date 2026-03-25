@@ -163,8 +163,3 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
 });
 
 module.exports = builder.getInterface();
-
-// Publish to central
-const { addonBuilder, publishToCentral } = require("stremio-addon-sdk")
-publishToCentral('https://stremio-hideui-addon.onrender.com/manifest.json')
-
