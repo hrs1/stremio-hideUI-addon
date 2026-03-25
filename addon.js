@@ -19,7 +19,7 @@ const builder = new addonBuilder({
     id: "org.spoilerfirewall.global" + Date.now(),
     version: "1.0.0",
     name: "Spoiler Firewall",
-    description: "Global anti-spoiler layer for Stremio                                            " + 
+    description: "Global anti-spoiler layer for Stremio to hide series descriptions                                           " + 
         "Note: Requires to move the add-on to top of the list (highest priority) in your account!." + 
         "You can use something like a Stremio Add-on Manager (https://stremio-addon-manager.vercel.app/)",
     resources: ["meta", "catalog"],
