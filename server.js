@@ -1,4 +1,4 @@
-const { serveHTTP } = require("stremio-addon-sdk");
+const { serveHTTP, , publishToCentral } = require("stremio-addon-sdk");
 const addonInterface = require("./addon");
 
 console.log("🔥 server.js starting...");
@@ -9,5 +9,6 @@ serveHTTP(addonInterface, {
     port: PORT,
     host: "0.0.0.0"
 });
+publishToCentral('https://stremio-hideui-addon.onrender.com//manifest.json');
 
 console.log("✅ Listening on port:", PORT);
