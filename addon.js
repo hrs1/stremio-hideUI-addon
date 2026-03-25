@@ -39,6 +39,8 @@ const builder = new addonBuilder({
         configurationRequired: true
     },
 
+    contactemail: "srh8119@gmail.com",
+    
     config: [
         {
             key: "mode",
