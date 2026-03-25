@@ -19,8 +19,8 @@ const builder = new addonBuilder({
     id: "org.spoilerfirewall.global" + Date.now(),
     version: "1.0.0",
     name: "Spoiler Firewall",
-    description: "Global anti-spoiler layer for Stremio\n\n" + 
-        "Note: Requires to move the add-on to top of the list (highest priority) in your account!.\n" + 
+    description: "Global anti-spoiler layer for Stremio                                            " + 
+        "Note: Requires to move the add-on to top of the list (highest priority) in your account!." + 
         "You can use something like a Stremio Add-on Manager (https://stremio-addon-manager.vercel.app/)",
     resources: ["meta", "catalog"],
     types: ["series"],
@@ -41,12 +41,6 @@ const builder = new addonBuilder({
 
     config: [
         {
-            key: "enabled",
-            type: "checkbox",
-            title: "Enable Spoiler Free Mode",
-            default: true
-        },
-        {
             key: "mode",
             type: "select",
             title: "Spoiler Level (minimal: desc only, standard: titles+desc, aggressive: +images, paranoid: max)",
@@ -57,11 +51,6 @@ const builder = new addonBuilder({
                  "Paranoid: maximum protection, removes almost all episode info.",
             options: ["minimal", "standard", "aggressive", "paranoid"],
             default: "standard"
-        },
-        {
-            key: "check",
-            type: "textarea",
-            default: "Just checking here"
         }
     ]
 });
@@ -80,10 +69,6 @@ builder.defineMetaHandler(async ({ id, type, config }) => {
     try {
         const meta = await getMeta(id);
         if (!meta) return { meta: null };
-
-        if (!config || config.enabled !== "on") {
-            return { meta };
-        }
 
         const mode = config.mode || "standard";
 
