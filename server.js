@@ -9,6 +9,14 @@ serveHTTP(addonInterface, {
     port: PORT,
     host: "0.0.0.0"
 });
-publishToCentral('https://stremio-hideui-addon.onrender.com//manifest.json');
+
+(async () => {
+    try {
+        await publishToCentral('https://stremio-hideui-addon.onrender.com/manifest.json');
+        console.log("Published to central successfully");
+    } catch (err) {
+        console.error("Publish failed:", err);
+    }
+})();
 
 console.log("✅ Listening on port:", PORT);
