@@ -1,4 +1,4 @@
-const { serveHTTP, , publishToCentral } = require("stremio-addon-sdk");
+const { serveHTTP, publishToCentral } = require("stremio-addon-sdk");
 const addonInterface = require("./addon");
 
 console.log("🔥 server.js starting...");
