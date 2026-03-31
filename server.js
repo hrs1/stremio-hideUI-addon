@@ -7,13 +7,13 @@ const PORT = process.env.PORT || 10000;
 
 serveHTTP(addonInterface, {
     port: PORT,
-    host: "0.0.0.0"
+    host: "127.0.0.1"
 });
 
 (async () => {
     try {
-        await publishToCentral('https://stremio-hideui-addon.onrender.com/manifest.json');
-        console.log("Published to central successfully");
+      //  await publishToCentral('https://stremio-hideui-addon.onrender.com/manifest.json');
+      //  console.log("Published to central successfully");
     } catch (err) {
         console.error("Publish failed:", err);
     }
